@@ -1,0 +1,289 @@
+
+POSTGRESQL QURIES:-
+------------------
+------------------
+
+
+1).LOOKING FOR THE LIST USERS PRESENT INTO THE SERVER:-
+
+postgres=# \du
+                                   List of roles
+ Role name |                         Attributes                         | Member of
+-----------+------------------------------------------------------------+-----------
+ postgres  | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
+ user1     | Superuser                                                  | {}
+
+
+
+2)CREATING A ROLE FOR USER AS SUPER USER BY GIVING HIM ALL THE ACESS AND PASSWORD:-
+postgres=# CREATE ROLE myroleuser WITH LOGIN SUPERUSER CREATEDB CREATEROLE INHERIT REPLICATION CONNECTION LIMIT -1 PASSWORD 'myroleuser';
+CREATE ROLE
+
+postgres=# \du
+                                    List of roles
+ Role name  |                         Attributes                         | Member of
+------------+------------------------------------------------------------+-----------
+ myroleuser | Superuser, Create role, Create DB, Replication             | {}
+ postgres   | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
+ user1      | Superuser                                                  | {}
+
+ 
+
+
+3).UPDATING USER INFORMATION :-
+postgres=# ALTER ROLE user1 WITH LOGIN SUPERUSER CREATEDB CREATEROLE INHERIT REPLICATION CONNECTION LIMIT -1 PASSWORD 'user1';
+ALTER ROLE
+postgres=# \du
+                                    List of roles
+ Role name  |                         Attributes                         | Member of
+------------+------------------------------------------------------------+-----------
+ myroleuser | Superuser, Create role, Create DB, Replication             | {}
+ postgres   | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
+ user1      | Superuser, Create role, Create DB, Replication             | {}
+ user2      | Superuser, Create role, Create DB, Replication             | {}
+
+
+
+4).CONNECTING TO THE SELECTED ROLE USER:-
+postgres=# \c postgres myroleuser
+Password for user myroleuser:
+You are now connected to database "postgres" as user "myroleuser".
+
+
+5).DROPPING THE USER FROM THE ROLE
+postgres=# \du
+                                   List of roles
+ Role name |                         Attributes                         | Member of
+-----------+------------------------------------------------------------+-----------
+ postgres  | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
+ qauser    | Superuser, Create role, Create DB, Replication             | {}
+ user1     | Superuser                                                  | {}
+
+
+postgres=# DROP ROLE qauser;
+DROP ROLE
+
+
+6).LOOKING FOR SCHEMA:-
+
+postgres=# \dn
+  List of schemas
+  Name  |  Owner
+--------+----------
+ public | postgres
+(1 row)
+
+7)CREATING SCHEMA:-
+
+postgres=# CREATE SCHEMA myschema;
+CREATE SCHEMA
+postgres=# \dn
+   List of schemas
+   Name   |  Owner
+----------+----------
+ myschema | postgres
+ public   | postgres
+(2 rows)
+
+
+8).ALTERING SCHEMA NAME:-
+
+postgres=# ALTER SCHEMA myschema RENAME TO myowner;
+ALTER SCHEMA
+
+postgres=# \dn
+  List of schemas
+  Name   |  Owner
+---------+----------
+ myowner | postgres
+ public  | postgres
+(2 rows)
+
+
+9).DROPPING SCHEMA:-
+postgres=# DROP SCHEMA myowner;
+DROP SCHEMA
+postgres=# \dn
+  List of schemas
+  Name  |  Owner
+--------+----------
+ public | postgres
+(1 row)
+
+
+
+10).LOOKING FOR THE LIST DATABASES PRESENT INTO THE SERVER:-
+
+postgres=# \list
+                                                         List of databases
+           Name            |  Owner   | Encoding |          Collate           |           Ctype            |   Access privileges
+---------------------------+----------+----------+----------------------------+----------------------------+-----------------------
+ dvdrental                 | postgres | UTF8     | English_United States.1252 | English_United States.1252 |
+ mydatabase1               | postgres | UTF8     | English_United States.1252 | English_United States.1252 |
+ postgres                  | postgres | UTF8     | English_United States.1252 | English_United States.1252 |
+ super_awesome_application | postgres | UTF8     | English_United States.1252 | English_United States.1252 |
+ template0                 | postgres | UTF8     | English_United States.1252 | English_United States.1252 | =c/postgres          +
+                           |          |          |                            |                            | postgres=CTc/postgres
+ template1                 | postgres | UTF8     | English_United States.1252 | English_United States.1252 | =c/postgres          +
+                           |          |          |                            |                            | postgres=CTc/postgres
+(6 rows)
+
+
+
+11).CREATIN DATABASE :-
+postgres=# CREATE DATABASE newdatabase;
+CREATE DATABASE
+postgres=# \list
+                                                          List of databases
+           Name            |   Owner    | Encoding |          Collate           |           Ctype            |   Access privileges
+---------------------------+------------+----------+----------------------------+----------------------------+-----------------------
+ dvdrental                 | postgres   | UTF8     | English_United States.1252 | English_United States.1252 |
+ mydatabase1               | postgres   | UTF8     | English_United States.1252 | English_United States.1252 |
+ newdatabase               | myroleuser | UTF8     | English_United States.1252 | English_United States.1252 |
+ postgres                  | postgres   | UTF8     | English_United States.1252 | English_United States.1252 |
+ super_awesome_application | postgres   | UTF8     | English_United States.1252 | English_United States.1252 |
+ template0                 | postgres   | UTF8     | English_United States.1252 | English_United States.1252 | =c/postgres          +
+                           |            |          |                            |                            | postgres=CTc/postgres
+ template1                 | postgres   | UTF8     | English_United States.1252 | English_United States.1252 | =c/postgres          +
+                           |            |          |                            |                            | postgres=CTc/postgres
+(7 rows)
+
+12).CONNECTING TO THE SELECTED DATABASE:-
+postgres=# \c newdatabase;
+You are now connected to database "newdatabase" as user "myroleuser".
+newdatabase=#
+
+
+
+13).CREATING TABLE INSIDE NEWDATABASE WHERE THEIR SHOULD BE ID WITH INTEGER, NAME WITH VARCHAR AND ADSRESS WITH VARCHAR WITH LIMITATION OF 500WORDS:-
+
+newdatabase=# CREATE TABLE mytable (id INT, name VARCHAR (500), address VARCHAR(500));
+CREATE TABLE
+newdatabase=# \dt
+           List of relations
+ Schema |  Name   | Type  |   Owner
+--------+---------+-------+------------
+ public | mytable | table | myroleuser
+(1 row)
+
+14)INSERTING THE VALES INSIDE THE TABLE:-
+
+newdatabase=# INSERT INTO mytable (id,name,address) VALUES (1,'john','101 east ave');
+INSERT 0 1
+
+15).TO SEE ALL THE INSERTED VALUES/INFOMATIONS :-
+
+newdatabase=# SELECT* FROM mytable;
+ id | name |   address
+----+------+--------------
+  1 | john | 101 east ave
+(1 row)
+
+16).INSERTING TWO OR MORE VALUES BY USING:-
+
+newdatabase=# INSERT INTO mytable (id,name, address) VALUES (2,'marry','202 weast ave'), (3,'ashly','303 north ave');
+INSERT 0 2
+newdatabase=# SELECT * FROM mytable;
+ id | name  |    address
+----+-------+---------------
+  1 | john  | 101 east ave
+  2 | marry | 202 weast ave
+  3 | ashly | 303 north ave
+(3 rows)
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+SQL QURIES INSIDE THE POSTGRES BY USING IT'S DATABASE
+------------------------------------------------------
+------------------------------------------------------
+
+17).LOOKING TO THE LIST OF TABLES WHICH I HAVE INSIDE THE DVDRENTAL:-
+
+dvdrental=# \dt
+             List of relations
+ Schema |     Name      | Type  |  Owner
+--------+---------------+-------+----------
+ public | actor         | table | postgres
+ public | address       | table | postgres
+ public | category      | table | postgres
+ public | city          | table | postgres
+ public | country       | table | postgres
+ public | customer      | table | postgres
+ public | film          | table | postgres
+ public | film_actor    | table | postgres
+ public | film_category | table | postgres
+ public | inventory     | table | postgres
+ public | language      | table | postgres
+ public | payment       | table | postgres
+ public | rental        | table | postgres
+ public | staff         | table | postgres
+ public | store         | table | postgres
+(15 rows)
+
+
+
+18).FOR LOOKING FOR ALL THE INFORMATIONS INSIDE A SPECIFIC TABLE:-
+
+dvdrental=# SELECT* FROM actor;
+ actor_id | first_name  |  last_name   |      last_update
+----------+-------------+--------------+------------------------
+        1 | Penelope    | Guiness      | 2013-05-26 14:47:57.62
+        2 | Nick        | Wahlberg     | 2013-05-26 14:47:57.62
+        3 | Ed          | Chase        | 2013-05-26 14:47:57.62
+        4 | Jennifer    | Davis        | 2013-05-26 14:47:57.62
+        5 | Johnny      | Lollobrigida | 2013-05-26 14:47:57.62
+        6 | Bette       | Nicholson    | 2013-05-26 14:47:57.62
+        7 | Grace       | Mostel       | 2013-05-26 14:47:57.62
+        8 | Matthew     | Johansson    | 2013-05-26 14:47:57.62
+        9 | Joe         | Swank        | 2013-05-26 14:47:57.62
+       10 | Christian   | Gable        | 2013-05-26 14:47:57.62
+       11 | Zero        | Cage         | 2013-05-26 14:47:57.62
+       12 | Karl        | Berry        | 2013-05-26 14:47:57.62
+       13 | Uma         | Wood         | 2013-05-26 14:47:57.62
+       14 | Vivien      | Bergen       | 2013-05-26 14:47:57.62
+       15 | Cuba        | Olivier      | 2013-05-26 14:47:57.62
+       16 | Fred        | Costner      | 2013-05-26 14:47:57.62
+       17 | Helen       | Voight       | 2013-05-26 14:47:57.62
+       18 | Dan         | Torn         | 2013-05-26 14:47:57.62
+       19 | Bob         | Fawcett      | 2013-05-26 14:47:57.62
+       20 | Lucille     | Tracy        | 2013-05-26 14:47:57.62
+       21 | Kirsten     | Paltrow      | 2013-05-26 14:47:57.62
+       22 | Elvis       | Marx         | 2013-05-26 14:47:57.62
+       23 | Sandra      | Kilmer       | 2013-05-26 14:47:57.62
+       24 | Cameron     | Streep       | 2013-05-26 14:47:57.62
+       25 | Kevin       | Bloom        | 2013-05-26 14:47:57.62
+       26 | Rip         | Crawford     | 2013-05-26 14:47:57.62
+       27 | Julia       | Mcqueen      | 2013-05-26 14:47:57.62
+
+
+19).TO LOOK FOR THE NUMBER OF ID WHICH I HAVE PRESEN INSIDE THE TABLE:-
+
+dvdrental=# SELECT COUNT(actor_id)FROM actor;
+ count
+-------
+   200
+(1 row)
+
+
+20). TO LOOK FOR THE MAXIMUM NUMBER OF ID IN HAVE INSIDE THE TABLE IN A ROW:-
+
+dvdrental=# SELECT COUNT(actor_id)FROM actor;
+ count
+-------
+   200
+(1 row)
+
+
+21).TO LOOK FOR THE MINIMUM NUMBER OF ID IN HAVE INSIDE THE TABLE IN A ROW:- 
+
+dvdrental=# SELECT MIN(actor_id) FROM actor;
+ min
+-----
+   1
+(1 row)
+
+
+
+
+
